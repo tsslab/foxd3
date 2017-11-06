@@ -29,6 +29,11 @@ if(!require("viridis")){
   library(viridis)
 }
 
+if(!require("knitr")){
+  install.packages("knitr")
+  library(knitr)
+}
+
 # load necessary data ----------------------
 load("RData/annot.RData")
 
