@@ -1,0 +1,6 @@
+To run the shinyApp you should have R and the shiny package installed. Please download the files on your computer in a new directory and in R type:
+library(shiny)
+runApp(“path_to_directory_with_files”) 
+
+If you also have RStudio then you can use RStudio to visualise the App:
+Please download the files on your computer on a new directory and open the ui.R file with RStudio. Then click "Run App” which is on the top right corner of the ui.R script for the application to run.
