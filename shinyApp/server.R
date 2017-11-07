@@ -75,32 +75,43 @@ motif_heatmap <- function(ucol_Sums_Total_df,colSums.no_clusters,raw_motif_table
   return(pval.Tot.df)
 }
 
-# load necessary data ----------------------
-load('RData/genes2names_tfbs.RData')
-load("RData/FoxD3_Shiny_Test.RData")
-load("RData/oriTFBS.RData")
-load("RData/tfbs_enh.RData")
-load("RData/annot.RData")
-load("RData/clusters.RData")
-load("RData/enh2gene_peaks.RData")
-load("RData/cluster_lists.RData")
 
 # Define server logic ------------------------
 
 shinyServer(function(input, output, session){
 
+  # load necessary data ----------------------
+  withProgress(message = 'Please wait',
+               detail = 'Loading the files...', value = 0, {
+                 load('RData/genes2names_tfbs.RData')
+                 incProgress(1/8)
+                 load("RData/FoxD3_Shiny_Test.RData")
+                 incProgress(2/8)
+                 load("RData/oriTFBS.RData")
+                 incProgress(3/8)
+                 load("RData/tfbs_enh.RData")
+                 incProgress(4/8)
+                 load("RData/annot.RData")
+                 incProgress(5/8)
+                 load("RData/clusters.RData")
+                 incProgress(6/8)
+                 load("RData/enh2gene_peaks.RData")
+                 incProgress(7/8)
+                 load("RData/cluster_lists.RData")
+               }
+  )
   
 #  RNA-seq Analysis Part -------------------------------------------------------------
 #  updateSelectizeInput(session, 'Gene_Name', choices = annot$Associated.Gene.Name, server = TRUE)
-  output$Gene_Name_UI <- renderUI({
-    selectInput(
-      'Gene_Name',
-      label = NULL,
-      choices = annot$Associated.Gene.Name,
-      selected = "foxd5",
-      multiple = FALSE
-    )
-  })
+  # output$Gene_Name_UI <- renderUI({
+  #   selectInput(
+  #     'Gene_Name',
+  #     label = NULL,
+  #     choices = annot$Associated.Gene.Name,
+  #     selected = "foxd5",
+  #     multiple = FALSE
+  #   )
+  # })
   
   output$SelectedGene <- renderText({ 
     paste("You have selected the gene: ", input$Gene_Name )
