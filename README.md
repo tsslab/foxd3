@@ -1,6 +1,6 @@
 # FoxD3
 
-Here we provide additional information such as scripts and data for the FoxD3 Project.
+Here we provide additional information such as scripts and applications to access data from the FoxD3 Project.
 
 
 ## Project Description
