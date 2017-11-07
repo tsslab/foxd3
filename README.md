@@ -1,6 +1,6 @@
 # FoxD3
 
-Here we provide additional information such as scripts and applications to access data from the FoxD3 Project.
+Here we provide additional information such as scripts and applications to access data generated in the FoxD3 Project.
 
 
 ## Project Description
@@ -50,6 +50,14 @@ Okinawa Institute of Science and Technology,
 Molecular Genetics Unit,  
 Onna, 904-0495 Japan
 
+Daria Gavriouchkina, Ruth M Williams, Martyna Lukoseviciute, Tatiana Hochgreb-Hagele, Upeka Senanayake, Vanessa Chong-Morrison, Tatjana Sauka-Spengler: [Sauka-Spengler lab](http://www.tsslab.co.uk) based at [Weatherall Institute of Molecular Medicine](http://www.imm.ox.ac.uk) and at [Radcliffe Department of Medicine](http://www.rdm.ox.ac.uk), University of Oxford
+
+Adam Mead: [Mead lab](https://www.rdm.ox.ac.uk/people/adam-mead) based at [Weatherall Institute of Molecular Medicine](https://www.imm.ox.ac.uk), University of Oxford
+
+Emmanouela Repapi is part of [Computational Biology Research Group](http://www.cbrg.ox.ac.uk/cbrg/) and Supat Thongjuea is part of the [MRC WIMM Centre for Computational Biology](http://www.imm.ox.ac.uk/mrc-wimm-centre-for-computational-biology)
+
+
 ## Acknowledgements
 
 This work was supported by MRC (G0902418), Lister Institute prize, Leverhulme Trust grant (RPG-2015-592026), March of Dimes Basil OConnor Award to Tatjana Sauka-Spengler, and SNF Fellowship to Daria Gavriouchkina.
+
