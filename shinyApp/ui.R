@@ -307,7 +307,7 @@ shinyUI(fluidPage(theme = shinytheme("cosmo"),
                       ),
                      # About us -----------------------------------------
                      tabPanel("About us", value=2,
-                              includeMarkdown(knitr::knit("FoxD3_README.Rmd"))),
+                              includeMarkdown(knitr::knit("FoxD3.Rmd"))),
                      id = "tabselected"))
                    )
                  )
