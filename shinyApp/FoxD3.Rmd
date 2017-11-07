@@ -50,6 +50,8 @@ Daria Gavriouchkina, Ruth M Williams, Martyna Lukoseviciute, Tatiana Hochgreb-Ha
 
 Adam Mead: [Mead lab](http://www.ndcls.ox.ac.uk/researchers/researcher/adam-mead) based at [Weatherall Institute of Molecular Medicine](www.imm.ox.ac.uk), University of Oxford
 
+Emmanouela Repapi is part of [Computational Biology Research Group](http://www.cbrg.ox.ac.uk/cbrg/) and Supat Thongjuea is part of the [MRC WIMM Centre for Computational Biology](http://www.imm.ox.ac.uk/mrc-wimm-centre-for-computational-biology)
+
 ### Keywords
 
 neural crest, enhancer, pioneer facto, gene regulatory network, stem cells
