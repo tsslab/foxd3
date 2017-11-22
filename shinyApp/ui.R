@@ -36,6 +36,7 @@ if(!require("knitr")){
 
 # load necessary data ----------------------
 load("RData/annot.RData")
+load("RData/cor_genes_names.RData")
 
 # User Interface  ----------------------
 
@@ -47,7 +48,8 @@ shinyUI(fluidPage(theme = shinytheme("cosmo"),
                  radioButtons("chto_delat", "Select one:",
                               choices=c("Search for genes of interest"=1,
                                 "Search putative cis-regulatory clusters"=2,
-                                "Parse TFBS"=3))
+                                "Parse TFBS"=3,
+                                "Explore coexpression genes"=4))
                  ),
     # Main  -----------------------------------------
                  mainPanel(
@@ -302,7 +304,22 @@ shinyUI(fluidPage(theme = shinytheme("cosmo"),
                                 DT::dataTableOutput('ori_table', width="70%")#,
                                 #h3("Number of binding sites found"),
                                 #DT::dataTableOutput('tfbs_enh', width="80%")
-                                )
+                                ),
+                     
+                     # Single cell coexpression -----------------------------------------
+                     conditionalPanel(condition="input.chto_delat==4", 
+                                      helpText("Select a gene to view the coexpression heatmap:"),
+                                      selectInput('Cor_Gene',
+                                                  label=NULL,
+                                                  choices=genenames,
+                                                  selected = "cdx4",
+                                                  multiple = FALSE),
+                                      helpText("Select a value for the minimum of the correlation:"),
+                                      numericInput('cor_thres', label=NULL, value=0.8,
+                                                   min=0.05, max=1, step=0.05),
+                                      textOutput("text_cor"),
+                                      d3heatmapOutput("heatmap_coexpr",  width = "80%", height = "800px")
+                     )
                      
                       ),
                      # About us -----------------------------------------
