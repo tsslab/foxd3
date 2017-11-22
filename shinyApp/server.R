@@ -75,7 +75,6 @@ motif_heatmap <- function(ucol_Sums_Total_df,colSums.no_clusters,raw_motif_table
   return(pval.Tot.df)
 }
 
-
 # Define server logic ------------------------
 
 shinyServer(function(input, output, session){
@@ -84,22 +83,30 @@ shinyServer(function(input, output, session){
   withProgress(message = 'Please wait',
                detail = 'Loading the files...', value = 0, {
                  load('RData/genes2names_tfbs.RData')
-                 incProgress(1/8)
+                 incProgress(1/9)
                  load("RData/FoxD3_Shiny_Test.RData")
-                 incProgress(2/8)
+                 incProgress(2/9)
                  load("RData/oriTFBS.RData")
-                 incProgress(3/8)
+                 incProgress(3/9)
                  load("RData/tfbs_enh.RData")
-                 incProgress(4/8)
+                 incProgress(4/9)
                  load("RData/annot.RData")
-                 incProgress(5/8)
+                 incProgress(5/9)
                  load("RData/clusters.RData")
-                 incProgress(6/8)
-                 load("RData/enh2gene_peaks.RData")
-                 incProgress(7/8)
+                 incProgress(6/9)
+                 load("RData/cor_genes.RData")
+                 # running the correlation here instead of loading the massive matrix, saves time
+                 #mat = my_exprs - rowMeans(my_exprs);
+                 #mat = mat / sqrt(rowSums(mat^2));   
+                 #cor_matrix = tcrossprod(mat);
+                 #colnames(cor_matrix) <- row.names(cor_matrix) <- row.names(my_exprs)
+                 incProgress(7/9)
                  load("RData/cluster_lists.RData")
+                 incProgress(8/9)
+                 load("RData/enh2gene_peaks.RData")
                }
   )
+
   
 #  RNA-seq Analysis Part -------------------------------------------------------------
 #  updateSelectizeInput(session, 'Gene_Name', choices = annot$Associated.Gene.Name, server = TRUE)
@@ -730,5 +737,47 @@ shinyServer(function(input, output, session){
   output$event <- renderPrint({
     d <- event_data("plotly_hover")
   })  
+  
+  cor_matrix <- reactive({
+    cor(t(my_exprs),t(my_exprs[input$Cor_Gene,,drop=F]))
+  })
+    
+  correl_genes <- reactive({
+    corgenes <- row.names(cor_matrix())[cor_matrix()>input$cor_thres]
+    return(corgenes) 
+  })
+
+  output$text_cor <- renderText({
+    if (length(correl_genes())<2) {
+      return("No correlated genes for these choices, please select another gene or a lower correlation threshold.")
+    } else if (length(correl_genes())>500) {
+      return("Too many correlated genes for these choices, please select another gene or a higher correlation threshold.")
+    } else {
+      return(NULL)
+    }
+  })  
+  
+  output$heatmap_coexpr <- renderD3heatmap({
+    # not working for a vector of one
+    if (length(correl_genes())<2) {
+      return(NULL)
+    } else if (length(correl_genes())>500) {
+      return(NULL)
+    } else {
+      myfont <- paste0(round(1/log10(length(correl_genes()))*10,0),"px")
+      d3heatmap(my_exprs[correl_genes(),, drop=F],
+              dendrogram ="column",
+              colors = "YlOrRd",
+              show_grid = FALSE,
+              anim_duration = 0,
+              xaxis_font_size = "6px",
+              yaxis_font_size = myfont,
+              xaxis_height = 150,
+              yaxis_width = 150,  
+              labCol = paste0("sample",1:ncol(my_exprs))
+      )
+    }  
+    })
+  
   
 })
