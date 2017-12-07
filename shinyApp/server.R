@@ -78,38 +78,35 @@ motif_heatmap <- function(ucol_Sums_Total_df,colSums.no_clusters,raw_motif_table
 # Define server logic ------------------------
 
 shinyServer(function(input, output, session){
-
+  
   # load necessary data ----------------------
   withProgress(message = 'Please wait',
                detail = 'Loading the files...', value = 0, {
                  load('RData/genes2names_tfbs.RData')
-                 incProgress(1/9)
+                 incProgress(1/10)
                  load("RData/FoxD3_Shiny_Test.RData")
-                 incProgress(2/9)
+                 incProgress(2/10)
                  load("RData/oriTFBS.RData")
-                 incProgress(3/9)
+                 incProgress(3/10)
                  load("RData/tfbs_enh.RData")
-                 incProgress(4/9)
+                 incProgress(4/10)
                  load("RData/annot.RData")
-                 incProgress(5/9)
+                 incProgress(5/10)
                  load("RData/clusters.RData")
-                 incProgress(6/9)
+                 incProgress(6/10)
                  load("RData/cor_genes.RData")
-                 # running the correlation here instead of loading the massive matrix, saves time
-                 #mat = my_exprs - rowMeans(my_exprs);
-                 #mat = mat / sqrt(rowSums(mat^2));   
-                 #cor_matrix = tcrossprod(mat);
-                 #colnames(cor_matrix) <- row.names(cor_matrix) <- row.names(my_exprs)
-                 incProgress(7/9)
+                 incProgress(7/10)
                  load("RData/cluster_lists.RData")
-                 incProgress(8/9)
+                 incProgress(8/10)
                  load("RData/enh2gene_peaks.RData")
+                 incProgress(9/10)
+                 load("RData/wgcnaclusters.RData")
                }
   )
-
   
-#  RNA-seq Analysis Part -------------------------------------------------------------
-#  updateSelectizeInput(session, 'Gene_Name', choices = annot$Associated.Gene.Name, server = TRUE)
+  
+  #  RNA-seq Analysis Part -------------------------------------------------------------
+  #  updateSelectizeInput(session, 'Gene_Name', choices = annot$Associated.Gene.Name, server = TRUE)
   # output$Gene_Name_UI <- renderUI({
   #   selectInput(
   #     'Gene_Name',
@@ -249,13 +246,13 @@ shinyServer(function(input, output, session){
     # If missing input, return to avoid error later in function
     if(is.null(input$Gene_Name))
       return(NULL)
-
+    
     ## Process genes association with only one gene per peaks 
     
     table_enhancer_peaks1 <- subset(Enh_peaks.singles, Enh_peaks.singles$EnsemblGeneID == EnsId())
     table_enhancer_peaks1 <- table_enhancer_peaks1[,c(2:4)]
     table_enhancer_peaks1$Peak_name <- paste(table_enhancer_peaks1[,1],table_enhancer_peaks1[,2],table_enhancer_peaks1[,3],sep="_")
-
+    
     clust_corresp1 <- subset(cluster_table, cluster_table$row.names %in% table_enhancer_peaks1$Peak_name)
     
     #nrow(clust_corresp1)
@@ -274,8 +271,8 @@ shinyServer(function(input, output, session){
         which_clust_row_in <- rownames(t_clust_corresp1[t_clust_corresp1[i,] > 0 ,])
         which_clust_row_in_str <- toString(which_clust_row_in)
         table_enhancer_peaks1[i,4] <- which_clust_row_in_str
-        }
       }
+    }
     
     ## Process genes association with multiple genes per peaks  (set1)
     
@@ -306,7 +303,7 @@ shinyServer(function(input, output, session){
         table_enhancer_peaks2[i,4] <- which_clust_row_in_str2
       }
       table_enhancer_peaks_fin <- cbind(table_enhancer_peaks_fin, table_enhancer_peaks2)
-      }
+    }
     ## Process genes association with multiple genes per peaks  (set2)
     table_enhancer_peaks3 <- subset(Enh_peaks.mults2, Enh_peaks.mults2$EnsemblGeneID == EnsId())
     table_enhancer_peaks3 <- table_enhancer_peaks3[,c(2:4)]
@@ -324,47 +321,47 @@ shinyServer(function(input, output, session){
         which_clust_row_in3 <- rownames(t_clust_corresp2[t_clust_corresp3[i,] > 0 ,])
         which_clust_row_in_str3 <- toString(which_clust_row_in3)
         table_enhancer_peaks3[i,4] <- which_clust_row_in_str3
-        }
-      table_enhancer_peaks_fin <- unique(cbind(table_enhancer_peaks_fin, table_enhancer_peaks3))
       }
+      table_enhancer_peaks_fin <- unique(cbind(table_enhancer_peaks_fin, table_enhancer_peaks3))
+    }
     return(table_enhancer_peaks_fin)
   })
   
   output$table_enhancer_peaks <- renderTable({table_enhancer_peaks()})
-
+  
   # Subset TFBS in peaks -------------------------------------
   table_tfbs_gene <- reactive({
-     list_enh <- table_enhancer_peaks()
-     list_enh <- paste(table_enhancer_peaks()$Chrom,table_enhancer_peaks()$Start, table_enhancer_peaks()$End, sep="_")  
-     tfbs2 <- subset(tfbs, tfbs$geneid %in% list_enh)
-     rownames(tfbs2) <- tfbs2$geneid
-     tfbs2$geneid <- NULL
-     t_tfbs <- as.data.frame(t(tfbs2))
-     t_tfbs$Sums <- rowSums(t_tfbs)
-     t_tfbs <- t_tfbs[t_tfbs$Sums > 0,]
-     t_tfbs$Sums <- NULL
-     table_tfbs_gene <- as.data.frame(t(t_tfbs))
-   })
-       output$table_tfbs_gene <- renderTable({table_tfbs_gene()})
+    list_enh <- table_enhancer_peaks()
+    list_enh <- paste(table_enhancer_peaks()$Chrom,table_enhancer_peaks()$Start, table_enhancer_peaks()$End, sep="_")  
+    tfbs2 <- subset(tfbs, tfbs$geneid %in% list_enh)
+    rownames(tfbs2) <- tfbs2$geneid
+    tfbs2$geneid <- NULL
+    t_tfbs <- as.data.frame(t(tfbs2))
+    t_tfbs$Sums <- rowSums(t_tfbs)
+    t_tfbs <- t_tfbs[t_tfbs$Sums > 0,]
+    t_tfbs$Sums <- NULL
+    table_tfbs_gene <- as.data.frame(t(t_tfbs))
+  })
+  output$table_tfbs_gene <- renderTable({table_tfbs_gene()})
   
   # # TFBS Heatmap --------------------------------------------
-   output$HM <- renderD3heatmap({
-     if(nrow(table_tfbs_gene()) < 2)
-       return(NULL)
-     myPalette <- colorRampPalette(c("white", "red", "black"))(100)
-     d3heatmap(table_tfbs_gene(),
-               show_grid = FALSE,
-               anim_duration = 0,
-               colors = myPalette,
-               xaxis_font_size = "8px",
-               yaxis_font_size = "8px",
-               xaxis_height = 150,
-               yaxis_width = 150
-     )
-   })
-   
-
-# TFBS Analysis Part -----------------------------------------------------------
+  output$HM <- renderD3heatmap({
+    if(nrow(table_tfbs_gene()) < 2)
+      return(NULL)
+    myPalette <- colorRampPalette(c("white", "red", "black"))(100)
+    d3heatmap(table_tfbs_gene(),
+              show_grid = FALSE,
+              anim_duration = 0,
+              colors = myPalette,
+              xaxis_font_size = "8px",
+              yaxis_font_size = "8px",
+              xaxis_height = 150,
+              yaxis_width = 150
+    )
+  })
+  
+  
+  # TFBS Analysis Part -----------------------------------------------------------
   # Print selection ----------------------------- 
   output$SelectedTFBS <- renderText({
     paste("You have selected ", input$tf_select)
@@ -555,52 +552,52 @@ shinyServer(function(input, output, session){
   
   # Heatmap all stages --------------------------
   
-   output$heatmap1 <- renderD3heatmap({
-     d3heatmap(as.matrix(log_tf_fpkms()[,c(1:ncol(log_tf_fpkms())-1)]),
-               show_grid = FALSE,
-               anim_duration = 0,
-               colors = plasma(100),
-               xaxis_font_size = "8px",
-               yaxis_font_size = "8px",
-               xaxis_height = 150,
-               yaxis_width = 150,
-               labRow=log_tf_fpkms()[,ncol(log_tf_fpkms())]
-     )
-   })
-   
+  output$heatmap1 <- renderD3heatmap({
+    d3heatmap(as.matrix(log_tf_fpkms()[,c(1:ncol(log_tf_fpkms())-1)]),
+              show_grid = FALSE,
+              anim_duration = 0,
+              colors = plasma(100),
+              xaxis_font_size = "8px",
+              yaxis_font_size = "8px",
+              xaxis_height = 150,
+              yaxis_width = 150,
+              labRow=log_tf_fpkms()[,ncol(log_tf_fpkms())]
+    )
+  })
+  
   # Table with original PWMs to cluster 
-   
-   ori_table <-  reactive({
-     ori_table <- get(paste0(input$tf_select,".ori"))
-     ori_table <- as.data.frame(ori_table)
-     #print(ori_table)
-   })
-   
-   output$ori_table <- DT::renderDataTable({
-     DT::datatable(ori_table(),escape=FALSE)
-   })      
-   
-   tfbs_enh <- reactive({
-     #print(tfbs)
-     sel_colname <- paste(input$tf_select, unique(ori_table()$Clustered.Motif.ID), sep="_")
-     
-     tfbs_cols <- colnames(tfbs) %in% c(sel_colname, "geneid")
-     print ("tfbs_cols (logical):")
-     #print(tfbs_cols)
-     
-     enh_with_tf <- tfbs[,tfbs_cols]
-     enh_with_tf <- enh_with_tf[enh_with_tf > 0,]
-     print(enh_with_tf)
-     return(enh_with_tf$geneid)
-   })
   
- # output$tfbs_enh  <- DT::renderDataTable({
-#    if(ncol(tfbs_enh()) < 1)
-#      return(NULL)
-#    DT::datatable(tfbs_enh())
-#  })      
+  ori_table <-  reactive({
+    ori_table <- get(paste0(input$tf_select,".ori"))
+    ori_table <- as.data.frame(ori_table)
+    #print(ori_table)
+  })
   
-
+  output$ori_table <- DT::renderDataTable({
+    DT::datatable(ori_table(),escape=FALSE)
+  })      
+  
+  tfbs_enh <- reactive({
+    #print(tfbs)
+    sel_colname <- paste(input$tf_select, unique(ori_table()$Clustered.Motif.ID), sep="_")
+    
+    tfbs_cols <- colnames(tfbs) %in% c(sel_colname, "geneid")
+    print ("tfbs_cols (logical):")
+    #print(tfbs_cols)
+    
+    enh_with_tf <- tfbs[,tfbs_cols]
+    enh_with_tf <- enh_with_tf[enh_with_tf > 0,]
+    print(enh_with_tf)
+    return(enh_with_tf$geneid)
+  })
+  
+  # output$tfbs_enh  <- DT::renderDataTable({
+  #    if(ncol(tfbs_enh()) < 1)
+  #      return(NULL)
+  #    DT::datatable(tfbs_enh())
+  #  })      
+  
+  
   # Cluster parsing part ------------------------------------------------
   
   selected_cluster_list <- reactive({
@@ -617,18 +614,18 @@ shinyServer(function(input, output, session){
       paste0("You haven't selected any clusters ...")
     }
   })
-
+  
   nb_clusters_sel <- reactive({
     if (length(selected_cluster_list()) == 0){
       nb_clusters_sel <- rep(0, 6)
-      }else if(length(selected_cluster_list()) > 0){
-        nb_clusters_sel <- as.list(c(nrow(subset(clust_nbs[1:13,], clust_nbs[1:13,]$real_name %in% selected_cluster_list())),
-                             nrow(subset(clust_nbs[14:29,], clust_nbs[14:29,]$real_name %in% selected_cluster_list())),
-                             nrow(subset(clust_nbs[30:40,], clust_nbs[30:40,]$real_name %in% selected_cluster_list())),
-                             nrow(subset(clust_nbs[41:60,], clust_nbs[41:60,]$real_name %in% selected_cluster_list())),
-                             nrow(subset(clust_nbs[61:80,], clust_nbs[61:80,]$real_name %in% selected_cluster_list())),
-                             nrow(subset(clust_nbs[81:100,], clust_nbs[81:100,]$real_name %in% selected_cluster_list()))))
-        }
+    }else if(length(selected_cluster_list()) > 0){
+      nb_clusters_sel <- as.list(c(nrow(subset(clust_nbs[1:13,], clust_nbs[1:13,]$real_name %in% selected_cluster_list())),
+                                   nrow(subset(clust_nbs[14:29,], clust_nbs[14:29,]$real_name %in% selected_cluster_list())),
+                                   nrow(subset(clust_nbs[30:40,], clust_nbs[30:40,]$real_name %in% selected_cluster_list())),
+                                   nrow(subset(clust_nbs[41:60,], clust_nbs[41:60,]$real_name %in% selected_cluster_list())),
+                                   nrow(subset(clust_nbs[61:80,], clust_nbs[61:80,]$real_name %in% selected_cluster_list())),
+                                   nrow(subset(clust_nbs[81:100,], clust_nbs[81:100,]$real_name %in% selected_cluster_list()))))
+    }
     print("Number clusters selected=")
     print(nb_clusters_sel)
   })
@@ -636,62 +633,62 @@ shinyServer(function(input, output, session){
   cluster_names <- reactive({
     if (length(selected_cluster_list()) == 0){
       cluster_names <- rep("none", 6)
-      }else if(length(selected_cluster_list()) > 0){
-        cluster_names <- as.list(c(toString(subset(clust_nbs[1:13,], clust_nbs[1:13,]$real_name %in% selected_cluster_list())$name),
-                           toString(subset(clust_nbs[14:29,], clust_nbs[14:29,]$real_name %in% selected_cluster_list())$name),
-                           toString(subset(clust_nbs[30:40,], clust_nbs[30:40,]$real_name %in% selected_cluster_list())$name),
-                           toString(subset(clust_nbs[41:60,], clust_nbs[41:60,]$real_name %in% selected_cluster_list())$name),
-                           toString(subset(clust_nbs[61:80,], clust_nbs[61:80,]$real_name %in% selected_cluster_list())$name),
-                           toString(subset(clust_nbs[81:100,], clust_nbs[81:100,]$real_name %in% selected_cluster_list())$name)))
-      }
+    }else if(length(selected_cluster_list()) > 0){
+      cluster_names <- as.list(c(toString(subset(clust_nbs[1:13,], clust_nbs[1:13,]$real_name %in% selected_cluster_list())$name),
+                                 toString(subset(clust_nbs[14:29,], clust_nbs[14:29,]$real_name %in% selected_cluster_list())$name),
+                                 toString(subset(clust_nbs[30:40,], clust_nbs[30:40,]$real_name %in% selected_cluster_list())$name),
+                                 toString(subset(clust_nbs[41:60,], clust_nbs[41:60,]$real_name %in% selected_cluster_list())$name),
+                                 toString(subset(clust_nbs[61:80,], clust_nbs[61:80,]$real_name %in% selected_cluster_list())$name),
+                                 toString(subset(clust_nbs[81:100,], clust_nbs[81:100,]$real_name %in% selected_cluster_list())$name)))
+    }
     print("Names of selected clusters =")
     print(cluster_names)
   })
   
-    nb_positions <- reactive({
-      if (length(selected_cluster_list()) == 0){
-        nb_positions <- rep(0, 6)
-        }else if(length(selected_cluster_list()) > 0){
-          nb_positions <- as.list(c(sum(subset(clust_nbs[1:13,], clust_nbs[1:13,]$real_name %in% selected_cluster_list())$nb_peaks_in_cluster),
-                            sum(subset(clust_nbs[14:29,], clust_nbs[14:29,]$real_name %in% selected_cluster_list())$nb_peaks_in_cluster),
-                            sum(subset(clust_nbs[30:40,], clust_nbs[30:40,]$real_name %in% selected_cluster_list())$nb_peaks_in_cluster),
-                            sum(subset(clust_nbs[41:60,], clust_nbs[41:60,]$real_name %in% selected_cluster_list())$nb_peaks_in_cluster),
-                            sum(subset(clust_nbs[61:80,], clust_nbs[61:80,]$real_name %in% selected_cluster_list())$nb_peaks_in_cluster),
-                            sum(subset(clust_nbs[81:100,], clust_nbs[81:100,]$real_name %in% selected_cluster_list())$nb_peaks_in_cluster)))
-        }
-      print("Number enhancers selected=")
-      print(nb_positions)
-    })
-    
-    positions_subset_cluster <- reactive({
-      cluster_table2 <- cluster_table
-      rownames(cluster_table2) <- cluster_table2$row.names
-      cluster_table2$row.names <- NULL
-      subset_cluster_table <- cluster_table2[,colnames(cluster_table2) %in% selected_cluster_list()] # subset only the columns from table that were selected
-      if (length(selected_cluster_list())==1){
-        print("Only 1 cluster selected")
-        positions_subset_cluster <- cluster_table$row.names[subset_cluster_table > 0]
-        print(dim(positions_subset_cluster))
-      }else if(length(selected_cluster_list()) > 1){
-        print("Multiple clusters selected")
-        subset_cluster_table$sum <- rowSums(subset_cluster_table)
-        print(head(subset_cluster_table))
-        positions_subset_cluster <- rownames(subset_cluster_table[subset_cluster_table$sum == (ncol(subset_cluster_table)-1),][,1:(ncol(subset_cluster_table)-1)])
-        print(dim(positions_subset_cluster))
-      }
-      return(positions_subset_cluster)
-      })
-    
-    last_line <- reactive({
-      if (length(selected_cluster_list())==0){
-        last_line <- c("Total overlap in selection", 0, "NA", 0)
-      }else{
+  nb_positions <- reactive({
+    if (length(selected_cluster_list()) == 0){
+      nb_positions <- rep(0, 6)
+    }else if(length(selected_cluster_list()) > 0){
+      nb_positions <- as.list(c(sum(subset(clust_nbs[1:13,], clust_nbs[1:13,]$real_name %in% selected_cluster_list())$nb_peaks_in_cluster),
+                                sum(subset(clust_nbs[14:29,], clust_nbs[14:29,]$real_name %in% selected_cluster_list())$nb_peaks_in_cluster),
+                                sum(subset(clust_nbs[30:40,], clust_nbs[30:40,]$real_name %in% selected_cluster_list())$nb_peaks_in_cluster),
+                                sum(subset(clust_nbs[41:60,], clust_nbs[41:60,]$real_name %in% selected_cluster_list())$nb_peaks_in_cluster),
+                                sum(subset(clust_nbs[61:80,], clust_nbs[61:80,]$real_name %in% selected_cluster_list())$nb_peaks_in_cluster),
+                                sum(subset(clust_nbs[81:100,], clust_nbs[81:100,]$real_name %in% selected_cluster_list())$nb_peaks_in_cluster)))
+    }
+    print("Number enhancers selected=")
+    print(nb_positions)
+  })
+  
+  positions_subset_cluster <- reactive({
+    cluster_table2 <- cluster_table
+    rownames(cluster_table2) <- cluster_table2$row.names
+    cluster_table2$row.names <- NULL
+    subset_cluster_table <- cluster_table2[,colnames(cluster_table2) %in% selected_cluster_list()] # subset only the columns from table that were selected
+    if (length(selected_cluster_list())==1){
+      print("Only 1 cluster selected")
+      positions_subset_cluster <- cluster_table$row.names[subset_cluster_table > 0]
+      print(dim(positions_subset_cluster))
+    }else if(length(selected_cluster_list()) > 1){
+      print("Multiple clusters selected")
+      subset_cluster_table$sum <- rowSums(subset_cluster_table)
+      print(head(subset_cluster_table))
+      positions_subset_cluster <- rownames(subset_cluster_table[subset_cluster_table$sum == (ncol(subset_cluster_table)-1),][,1:(ncol(subset_cluster_table)-1)])
+      print(dim(positions_subset_cluster))
+    }
+    return(positions_subset_cluster)
+  })
+  
+  last_line <- reactive({
+    if (length(selected_cluster_list())==0){
+      last_line <- c("Total overlap in selection", 0, "NA", 0)
+    }else{
       last_line <- c("Total overlap in selection", as.character(length(selected_cluster_list())), "NA", as.character(length (positions_subset_cluster())))
       print(paste0("last_line ", last_line))
-      }
-      return(last_line)
-    })
-
+    }
+    return(last_line)
+  })
+  
   table_tss_cluster <- reactive({
     Cluster_group <- as.list(c("NCC Peak Clustering", "Sox10 Peak Clustering", "H3K27Ac Peak Clustering", "Epiboly Nucleosome Clustering", "HB Nucleosome Clustering", "July Nucleosome Clustering"))
     df <- cbind(Cluster_group, nb_clusters_sel(), cluster_names(), nb_positions())
@@ -700,7 +697,7 @@ shinyServer(function(input, output, session){
     df[7,] <- last_line()
     return(df)
   })
-   
+  
   table_positions_subset_clusters <- reactive({
     # If missing input, return to avoid error later in function
     if(length(selected_cluster_list()) == 0)
@@ -710,7 +707,7 @@ shinyServer(function(input, output, session){
     annot_table_positions_subset_clusters <- annot_table_positions_subset_clusters[,c(2,3,4,1,6)]
     return(annot_table_positions_subset_clusters)
   })
-
+  
   output$table_clusters_selected <- renderTable({table_tss_cluster()})
   
   output$table_cluster_positions <- DT::renderDataTable({
@@ -741,12 +738,12 @@ shinyServer(function(input, output, session){
   cor_matrix <- reactive({
     cor(t(my_exprs),t(my_exprs[input$Cor_Gene,,drop=F]))
   })
-    
+  
   correl_genes <- reactive({
     corgenes <- row.names(cor_matrix())[cor_matrix()>input$cor_thres]
     return(corgenes) 
   })
-
+  
   output$text_cor <- renderText({
     if (length(correl_genes())<2) {
       return("No correlated genes for these choices, please select another gene or a lower correlation threshold.")
@@ -766,18 +763,46 @@ shinyServer(function(input, output, session){
     } else {
       myfont <- paste0(round(1/log10(length(correl_genes()))*10,0),"px")
       d3heatmap(my_exprs[correl_genes(),, drop=F],
-              dendrogram ="column",
-              colors = "YlOrRd",
-              show_grid = FALSE,
-              anim_duration = 0,
-              xaxis_font_size = "6px",
-              yaxis_font_size = myfont,
-              xaxis_height = 150,
-              yaxis_width = 150,  
-              labCol = paste0("sample",1:ncol(my_exprs))
+                dendrogram ="column",
+                colors = "YlOrRd",
+                show_grid = FALSE,
+                anim_duration = 0,
+                xaxis_font_size = "6px",
+                yaxis_font_size = myfont,
+                xaxis_height = 150,
+                yaxis_width = 150,  
+                labCol = paste0("sample",1:ncol(my_exprs))
       )
     }  
-    })
+  })
+
+  wgcnacluster <- reactive({
+    if(grepl("Cluster",input$WGCNA_Choice)) {
+      mycluster <- gsub("Cluster",replacement = "", input$WGCNA_Choice)
+      return(paste0("cl",mycluster))
+    } else {
+      genes_cl <- data.frame(Geneid=c(cl1$Geneid,cl2$Geneid,cl3$Geneid,cl4$Geneid,cl5$Geneid,cl6$Geneid,cl7$Geneid,cl8$Geneid,cl9$Geneid,cl10$Geneid,cl11$Geneid,cl12$Geneid),
+                             cluster=c(rep(c("cl1","cl2","cl3","cl4","cl5","cl6","cl7","cl8","cl9","cl10","cl11","cl12"), times=c(nrow(cl1),nrow(cl2),nrow(cl3),nrow(cl4),nrow(cl5),nrow(cl6),nrow(cl7),nrow(cl8),nrow(cl9),nrow(cl10),nrow(cl11),nrow(cl12)))))
+      mycluster2 <- as.character(unique(genes_cl$cluster[genes_cl$Geneid==input$WGCNA_Choice]))
+        return(mycluster2)
+    }
+  })
   
+  output$text_wgcna <- renderText({
+    if (length(wgcnacluster())==1) {
+      return(paste0("Showing the genes for cluster: Cluster", gsub("cl",replacement="", wgcnacluster()),"."))
+    } else {
+      return(paste0("This gene belongs to multiple clusters: ", paste("Cluster",gsub("cl",replacement="", wgcnacluster()),collapse=","), ". Showing only the results from the first of them. To view one of the others, choose it directly from the above options. "))
+    }
+  })  
+  
+  output$wgcnaimage <- renderImage({
+    wgcna_file <- normalizePath(file.path('./images', paste0('Cluster', as.roman(gsub("cl",replacement="", wgcnacluster()[1])), '_WGCNA.png', sep='')))
+    list(src = wgcna_file,contentType = 'image/png', width = 400,height = 400)
+  }, deleteFile = FALSE)
+  
+  output$WGCNAtable <- DT::renderDataTable({
+    DT::datatable(get(wgcnacluster()[1]),escape=FALSE)
+  })      
   
 })
