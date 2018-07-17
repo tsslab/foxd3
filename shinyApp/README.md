@@ -1,6 +1,6 @@
 To run the shinyApp you should have R and the shiny package installed. Please download the files on your computer in a new directory and in R type: 
 
-library(shiny)
+library(shiny);
 library(rfigshare)
 
 runApp("path_to_directory_containing_RData_folder")
