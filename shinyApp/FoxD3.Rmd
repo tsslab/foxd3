@@ -6,55 +6,50 @@ output:
     highlight: tango
 ---
 
-## About us
-
-Here we provide additional information and data for the foxd3 Project.
-
-
 ### Manuscript and contact information
-From pioneer to repressor: Bimodal foxd3 activity dynamically remodels neural crest regulatory landscape in vivo
 
-Daria Gavriouchkina\*<sup>1,4</sup>, Ruth M Williams\*<sup>1</sup>, Martyna Lukoseviciute<sup>1</sup>, Tatiana Hochgreb-Hagele<sup>1</sup>, Upeka Senanayake<sup>1</sup>, Vanessa Chong-Morrison<sup>1</sup>, Supat Thongjuea<sup>2</sup>, Emmanouela Repapi<sup>3</sup>,Adam Mead<sup>2</sup> and Tatjana Sauka-Spengler<sup>1,§</sup>.
+#### From pioneer to repressor: Bimodal foxd3 activity dynamically remodels neural crest regulatory landscape _in vivo_
+
+Daria Gavriouchkina\*<sup>1,4</sup>, Ruth M Williams\*<sup>1</sup>, Martyna Lukoseviciute<sup>1</sup>, Tatiana Hochgreb-Hagele<sup>1</sup>, Upeka Senanayake<sup>1</sup>, Vanessa Chong-Morrison<sup>1</sup>, Supat Thongjuea<sup>2</sup>, Emmanouela Repapi<sup>3</sup>, Adam Mead<sup>2</sup> and Tatjana Sauka-Spengler<sup>1,§</sup>.
 
 \* co-first authors
 
- #### § Corresponding author: 
+##### § Corresponding author: 
  Tatjana Sauka-Spengler (tatjana.sauka-spengler@imm.ox.ac.uk)
 
 ### Affiliations
 
-1. University of Oxford
-Weatherall Institute of Molecular Medicine
-Radcliffe Department of Medicine
+1. University of Oxford,
+MRC Weatherall Institute of Molecular Medicine,
+Radcliffe Department of Medicine,
 Oxford, OX3 9DS
 
-2. University of Oxford
-Weatherall Institute of Molecular Medicine
-Molecular Haematology Unit
+2. University of Oxford,
+MRC Weatherall Institute of Molecular Medicine,
+Molecular Haematology Unit,
 Oxford, OX3 9DS
 
-3. University of Oxford 
-Computational Biology Research Group
-Weatherall Institute of Molecular Medicine
+3. University of Oxford,
+MRC WIMM Centre for Computational Biology,
+MRC Weatherall Institute of Molecular Medicine,
+Radcliffe Department of Medicine,
 Oxford OX3 9DS, UK
 
 4. Present address: 
-Okinawa Institute of Science and Technology
-Molecular Genetics Unit
+Okinawa Institute of Science and Technology,
+Molecular Genetics Unit,
 Onna, 904-0495 Japan
 
 
 
 
-Daria Gavriouchkina, Ruth M Williams, Martyna Lukoseviciute, Tatiana Hochgreb-Hagele, Upeka Senanayake, Vanessa Chong-Morrison, Tatjana Sauka-Spengler: [Sauka-Spengler lab](http://www.tsslab.co.uk) based at [Weatherall Institute of Molecular Medicine](www.imm.ox.ac.uk) and [Radcliffe Department of Medicine, University of Oxford] (www.rdm.ox.ac.uk)
+Daria Gavriouchkina, Ruth M Williams, Martyna Lukoseviciute, Tatiana Hochgreb-Hagele, Upeka Senanayake, Vanessa Chong-Morrison, Tatjana Sauka-Spengler: [Sauka-Spengler lab](http://www.tsslab.co.uk) based at [MRC Weatherall Institute of Molecular Medicine](www.imm.ox.ac.uk) and [Radcliffe Department of Medicine, University of Oxford] (www.rdm.ox.ac.uk)
 
-Adam Mead: [Mead lab](http://www.ndcls.ox.ac.uk/researchers/researcher/adam-mead) based at [Weatherall Institute of Molecular Medicine](www.imm.ox.ac.uk), University of Oxford
-
-Emmanouela Repapi is part of the [Computational Biology Research Group](http://www.cbrg.ox.ac.uk/cbrg/) and Supat Thongjuea is part of the [MRC WIMM Centre for Computational Biology](http://www.imm.ox.ac.uk/mrc-wimm-centre-for-computational-biology)
+Adam Mead: [Mead lab](http://www.ndcls.ox.ac.uk/researchers/researcher/adam-mead) based at [MRC Weatherall Institute of Molecular Medicine](www.imm.ox.ac.uk), University of Oxford
 
 ### Keywords
 
-neural crest, enhancer, pioneer facto, gene regulatory network, stem cells
+neural crest, enhancer, pioneer factor, gene regulatory network, stem cells
 
 ### Research Organisms
 
