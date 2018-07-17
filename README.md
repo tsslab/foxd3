@@ -31,18 +31,18 @@ Daria Gavriouchkina\*<sup>1,4</sup>, Ruth M Williams\*<sup>1</sup>, Martyna Luko
 ## Affiliations
 
 1. University of Oxford,  
-Weatherall Institute of Molecular Medicine,  
+MRC Weatherall Institute of Molecular Medicine,  
 Radcliffe Department of Medicine,  
 Oxford, OX3 9DS, UK 
 
 2. University of Oxford,  
-Weatherall Institute of Molecular Medicine,  
+MRC Weatherall Institute of Molecular Medicine,  
 Molecular Haematology Unit,  
 Oxford, OX3 9DS, UK 
 
 3. University of Oxford,  
-Computational Biology Research Group,  
-Weatherall Institute of Molecular Medicine,  
+MRC WIMM Centre for Computational Biology,
+MRC Weatherall Institute of Molecular Medicine,  
 Oxford OX3 9DS, UK 
 
 4. Present address:  
