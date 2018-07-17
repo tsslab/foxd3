@@ -3,41 +3,12 @@
 # load useful packages/libraries ----------------------
 
 library(shiny)
-
-if(!require("shinythemes")){
-  install.packages("shinythemes")
-  library(shinythemes)
-}
-
-if(!require("d3heatmap")){
-  install.packages("d3heatmap")
-  library(d3heatmap)
-}
-
-if(!require("DT")){
-  install.packages("DT")
-  library(DT)
-}
-
-if(!require("plotly")){
-  install.packages("plotly")
-  library(plotly)
-}
-
-if(!require("viridis")){
-  install.packages("viridis")
-  library(viridis)
-}
-
-if(!require("knitr")){
-  install.packages("knitr")
-  library(knitr)
-}
-
-# load necessary data ----------------------
-load("RData/annot.RData")
-load("RData/cor_genes_names.RData")
-load("RData/wgcnagenes.RData")
+library(shinythemes)
+library(d3heatmap)
+library(DT)
+library(plotly)
+library(viridis)
+library(knitr)
 
 # User Interface  ----------------------
 
@@ -50,8 +21,7 @@ shinyUI(fluidPage(theme = shinytheme("cosmo"),
                                               choices=c("Search for genes of interest"=1,
                                                         "Search putative cis-regulatory clusters"=2,
                                                         "Parse TFBS"=3,
-                                                        "Explore coexpression genes"=4, 
-                                                        "WGCNA clusters"=5))
+                                                        "Explore coexpression genes"=4))
                     ),
                     # Main  -----------------------------------------
                     mainPanel(
@@ -62,13 +32,10 @@ shinyUI(fluidPage(theme = shinytheme("cosmo"),
                                  conditionalPanel(condition="input.chto_delat==1", 
                                                   verbatimTextOutput("RNA-seq"),
                                                   helpText("Select a gene that you are  
-                                                           interested in"),
-                                                  selectInput('Gene_Name',
-                                                              label=NULL,
-                                                              choices=annot$Associated.Gene.Name,
-                                                              selected = "foxd5",
-                                                              multiple = FALSE),
-                                                  # uiOutput("Gene_Name_UI"),
+                                                           interested in:"),
+                                                  selectizeInput('Gene_Name', 
+                                                                 label = "Select Gene",
+                                                                 choices = NULL),
                                                   
                                                   h3("Gene Information"),
                                                   helpText("Some information about the gene you have selected."),   
@@ -130,22 +97,6 @@ shinyUI(fluidPage(theme = shinytheme("cosmo"),
                                                                 "NCC cluster3_1368" = "july_clust_subcl3_Cl1_3_6_8",
                                                                 "NCC cluster3_257" = "july_clust_subcl3_Cl2_5_7_control",
                                                                 "NCC cluster3_4" = "july_clust_subcl3_Cl4",
-                                                                "Sox10 clusters125" = "sox10_clust_Cl1_2_5",
-                                                                "Sox10 cluster1"="sox10_clust_Cl1_8572",
-                                                                "Sox10 cluster2" = "sox10_clust_Cl2_6311",
-                                                                "Sox10 cluster3" = "sox10_clust_Cl3_13541_ctrl", 
-                                                                "Sox10 cluster4" = "sox10_clust_Cl4_3341_inverted",
-                                                                "Sox10 cluster5" = "sox10_clust_Cl5_11184",
-                                                                "Sox10 cluster6" = "sox10_clust_Cl6_14524",
-                                                                "Sox10 cluster7" = "sox10_clust_Cl7_3156",
-                                                                "Sox10 cluster6_12345" = "cluster6_12345",
-                                                                "Sox10 cluster6_1235" = "cluster6_1235",
-                                                                "Sox10 cluster6_235" = "sox10_clust_subcl6_Cl2_3_5",
-                                                                "Sox10 cluster6_1" = "sox10_clust_subcl6_Cl1_4045",
-                                                                "Sox10 cluster6_2" = "sox10_clust_subcl6_Cl2_1080",
-                                                                "Sox10 cluster6_4" = "sox10_clust_subcl6_Cl4_2622",
-                                                                "Sox10 cluster6_5" = "sox10_clust_subcl6_Cl5_1617",
-                                                                "Sox10 clusters6_678"="sox10_clust_subcl6_Cl6_7_8_control",
                                                                 "H3K27Ac clusters12" = "h3k27ac_clust_1_2_pooled_control",
                                                                 "H3K27Ac clusters36" = "h3k27ac_clust_3_6",
                                                                 "H3K27Ac cluster4" = "h3k27ac_clust_4_6726_inverted",
@@ -177,26 +128,6 @@ shinyUI(fluidPage(theme = shinytheme("cosmo"),
                                                                 "Epiboly nucleosomes cluster18" = "cluster18_EpiNucK20",
                                                                 "Epiboly nucleosomes cluster19" = "cluster19_EpiNucK20",
                                                                 "Epiboly nucleosomes cluster20" = "cluster20_EpiNucK20",
-                                                                "HB nucleosomes cluster1" = "cluster_1_HBNucK20",
-                                                                "HB nucleosomes cluster2" = "cluster_2_HBNucK20",
-                                                                "HB nucleosomes cluster3" = "cluster_3_HBNucK20", 
-                                                                "HB nucleosomes cluster4" = "cluster_4_HBNucK20",
-                                                                "HB nucleosomes cluster5" = "cluster_5_HBNucK20",
-                                                                "HB nucleosomes cluster6" = "cluster_6_HBNucK20",
-                                                                "HB nucleosomes cluster7" = "cluster_7_HBNucK20",
-                                                                "HB nucleosomes cluster8" = "cluster_8_HBNucK20",
-                                                                "HB nucleosomes cluster9" = "cluster_9_HBNucK20",
-                                                                "HB nucleosomes cluster10" = "cluster_10_HBNucK20",
-                                                                "HB nucleosomes cluster11" = "cluster_11_HBNucK20",
-                                                                "HB nucleosomes cluster12" = "cluster_12_HBNucK20",
-                                                                "HB nucleosomes cluster13" = "cluster_13_HBNucK20",
-                                                                "HB nucleosomes cluster14" = "cluster_14_HBNucK20",
-                                                                "HB nucleosomes cluster15" = "cluster_15_HBNucK20",
-                                                                "HB nucleosomes cluster16" = "cluster_16_HBNucK20",
-                                                                "HB nucleosomes cluster17" = "cluster_17_HBNucK20",
-                                                                "HB nucleosomes cluster18" = "cluster_18_HBNucK20",
-                                                                "HB nucleosomes cluster19" = "cluster_19_HBNucK20",
-                                                                "HB nucleosomes cluster20" = "cluster_20_HBNucK20",
                                                                 "NCC nucleosomes cluster1" = "cluster_1_JulyNucK20",
                                                                 "NCC nucleosomes cluster2" = "cluster_2_JulyNucK20",
                                                                 "NCC nucleosomes cluster3" = "cluster_3_JulyNucK20", 
@@ -228,15 +159,15 @@ shinyUI(fluidPage(theme = shinytheme("cosmo"),
                                                   br(),
                                                   tableOutput('table_clusters_selected'),
                                                   br(),
-                                                  h3("Gene associations of clustered putative cis-regulatory elements"),
+                                                  h3("Genes associated to clustered putative cis-regulatory elements"),
                                                   br(),
                                                   DT::dataTableOutput('table_cluster_positions', width="80%"), 
-                                                  h3("Expression levels of gene associated of clustered putative cis-regulatory elements "),
+                                                  h3("Expression levels of associated genes"),
                                                   br(),
-                                                  plotlyOutput("boxplot", width = "80%", height = "400px"),
-                                                  verbatimTextOutput("event2"),
-                                                  br(),
-                                                  h3("TFBS enrichment in selected clusters")
+                                                  plotlyOutput("boxplot", width = "80%", height = "400px")
+                                                  #verbatimTextOutput("event2"),
+                                                  #br(),
+                                                  #h3("TFBS enrichment in selected clusters")
                                  ),
                                  
                                  # TFBS parsing -----------------------------------------
@@ -260,7 +191,7 @@ shinyUI(fluidPage(theme = shinytheme("cosmo"),
                                                                           "gata" = "gata",
                                                                           "gli" = "gli", 
                                                                           "hand" = "hand", 
-                                                                          "hif" = "hif", 
+                                                                         # "hif" = "hif", 
                                                                           "irx" = "irx", 
                                                                           "jun" = "jun", 
                                                                           "klf" = "klf", 
@@ -311,31 +242,15 @@ shinyUI(fluidPage(theme = shinytheme("cosmo"),
                                  # Single cell coexpression -----------------------------------------
                                  conditionalPanel(condition="input.chto_delat==4", 
                                                   helpText("Select a gene to view the coexpression heatmap:"),
-                                                  selectInput('Cor_Gene',
-                                                              label=NULL,
-                                                              choices=genenames,
-                                                              selected = "cdx4",
-                                                              multiple = FALSE),
+                                                  selectizeInput('Cor_Gene', 
+                                                                 label = "",
+                                                                 choices = NULL),
                                                   helpText("Select a value for the minimum of the correlation:"),
                                                   numericInput('cor_thres', label=NULL, value=0.8,
                                                                min=0.05, max=1, step=0.05),
                                                   textOutput("text_cor"),
                                                   d3heatmapOutput("heatmap_coexpr",  width = "80%", height = "800px")
-                                 ),
-                                 conditionalPanel(condition="input.chto_delat==5", 
-                                                  helpText("Select a gene or a cluster to view its expression:"),
-                                                  selectInput('WGCNA_Choice',
-                                                              label=NULL,
-                                                              choices=c(paste0("Cluster",1:12),wgcna_genes),
-                                                              selected = "Cluster1",
-                                                              multiple = FALSE),
-                                                  htmlOutput("text_wgcna"),
-                                                  #uiOutput("wgcnaimage"),
-                                                  imageOutput("wgcnaimage"),
-                                                  h5("Genes in cluster:"),
-                                                  DT::dataTableOutput("WGCNAtable", width="70%")
                                  )
-                                 
                                                   ),
                         # About us -----------------------------------------
                         tabPanel("About us", value=2,
