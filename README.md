@@ -43,7 +43,7 @@ Oxford, OX3 9DS, UK
 3. University of Oxford,  
 MRC WIMM Centre for Computational Biology,
 MRC Weatherall Institute of Molecular Medicine,  
-Oxford OX3 9DS, UK 
+Oxford, OX3 9DS, UK 
 
 4. Present address:  
 Okinawa Institute of Science and Technology,  
