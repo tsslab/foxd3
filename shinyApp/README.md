@@ -1,5 +1,5 @@
-This app is available to visualise in: 
-https://livedataoxford.shinyapps.io/FoxD3-project-TSS-Lab/
+## This app is also available to visualise in: 
+## https://livedataoxford.shinyapps.io/FoxD3-project-TSS-Lab/
 
 To run the shinyApp locally you should have R and the following packages installed: shiny, d3heatmap, DT, plotly, viridis, dplyr, rfigshare. Please download the files on your computer in a new directory and in R type: 
 
